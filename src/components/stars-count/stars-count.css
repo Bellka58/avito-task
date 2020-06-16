@@ -1,0 +1,18 @@
+.stars-count {
+    display: flex;
+    align-items: center;
+}
+
+.stars-count img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+.stars-count span {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.stars-count__name {
+    font-size: 18px;
+}

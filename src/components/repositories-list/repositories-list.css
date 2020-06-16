@@ -1,0 +1,65 @@
+.repositories-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.repositories-list__item {
+    width: 80vw;
+    max-width: 800px;
+    background: #F5F5F5;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    padding: 15px 20px 10px 15px;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px 5px;
+}
+
+.repositories-list__loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+}
+
+.repositories-list__item * {
+    align-self: center;
+}
+
+.repositories-list__item div:last-child {
+    align-self: center;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.repositories-list__item .url {
+    color: #7085B9;
+    text-decoration: none;
+}
+
+.repositories-list__item .url:hover {
+    align-self: center;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    color: #7085B9;
+    text-decoration: underline;
+}
+
+.list-item__name {
+    font-size: 18px;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s ease-out;
+}
+
+.list-item__name:hover {
+    color: var(--accent-color)
+}
+
+.list-item__last-commit {
+    color: #666;
+    font-size: 14px;
+}
