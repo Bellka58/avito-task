@@ -10,6 +10,7 @@ import { checkTotalCount } from '../utils/utils';
 const MainPage = () => {  
   const [searchValue, setSearchValue] = useState(localStorage.getItem('search-value') || '');
 
+  const [trending, setTrending] = useState(false);
   const [reposList, setReposList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -17,41 +18,51 @@ const MainPage = () => {
     currentPage: +localStorage.getItem('page') || 1,
     totalPages: 1,
   });
-
   const { currentPage, totalPages } = pages;
-  useEffect(() => {
+
+  const trendingRequest = () => {
     setIsError(false)
     setIsLoading(true);
-    localStorage.setItem("page", currentPage);
-    localStorage.setItem('search-value', searchValue);
-    console.log(searchValue)
-    if (!searchValue) {
-      getTrendingRepos()
-        .then((res) => {
-          console.log(res)
-          setReposList(res);
-          setPages({ currentPage: 1, totalPages: 1 });
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.log(err)
-          setIsLoading(false);
-          setIsError(true);
-        });
-    } else {
-    getReposesByName(searchValue, pages.currentPage)
-      .then(({ items, totalCount }) => {
-        setReposList(items);
-        setPages({
-          ...pages,
-          totalPages: checkTotalCount(totalCount),
-        });
+    setTrending(true)
+
+    getTrendingRepos()
+      .then((res) => {
+        setReposList(res);
+        setPages({ currentPage: 1, totalPages: 1 });
+        localStorage.setItem("page", 1);
         setIsLoading(false);
       })
       .catch((err) => {
         setIsLoading(false);
-        setIsError(true)
+        setIsError(true);
       });
+    };
+
+  const repositoriesRequest = (value, page) => {
+    setIsError(false)
+    setIsLoading(true);
+    setTrending(false)
+    localStorage.setItem("page", page);
+
+    getReposesByName(value, page)
+    .then(({ items, totalCount }) => {
+      setReposList(items);
+      setPages({
+        currentPage: page,
+        totalPages: checkTotalCount(totalCount),
+      });
+      setIsLoading(false);
+    })
+    .catch((err) => {
+      setIsLoading(false);
+      setIsError(true)
+    });};
+
+  useEffect(() => {
+    if (!searchValue) {
+      trendingRequest()
+    } else {
+      repositoriesRequest(searchValue, currentPage)
     }
   }, [searchValue, currentPage]);
 
@@ -59,13 +70,12 @@ const MainPage = () => {
     <div className="main-page">
       <SearchInput
         inputValue={searchValue}
-        setInputValue={debounce(setSearchValue, 1000)}
-        setPage={(page) => setPages({ ...pages, currentPage: page })}
+        setInputValue={debounce(setSearchValue, 1500)}
       />
-      <RepositoriesList isError={isError} list={reposList} isLoading={isLoading} />
+      <RepositoriesList isError={isError} list={reposList} isLoading={isLoading} trending={trending} />
       {totalPages > 1 && <Pagination
         currentPage={currentPage}
-        setCurrentPage={(value) => setPages({...pages, currentPage: value})}
+        setCurrentPage={(page) => setPages({ ...pages, currentPage: page })}
         pagesCount={totalPages}
       />}
     </div>

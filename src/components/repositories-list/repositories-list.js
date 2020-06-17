@@ -5,7 +5,7 @@ import Loader from '../loader';
 import RepositoriesListItem from './repositories-list-item';
 import ErrorIndicator from '../error-indicator';
 
-const RepositoriesList = ({ list, isLoading, isError }) => {
+const RepositoriesList = ({ trending, list, isLoading, isError }) => {
   const renderListItem = (repository) => {
     return (
       <RepositoriesListItem key={repository.id} item={repository} />
@@ -24,7 +24,12 @@ const RepositoriesList = ({ list, isLoading, isError }) => {
     );
   }
 
-  return <ul className="repositories-list">{list.map(renderListItem)}</ul>;
+  return (
+    <>
+      {trending && <h2>Trending today</h2>}
+      <ul className="repositories-list">{list.map(renderListItem)}</ul>
+    </>
+  );
 };
 
 

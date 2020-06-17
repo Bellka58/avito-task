@@ -58,7 +58,6 @@ export const getReposesByName = async (name, page) => {
     const res = await getResource(
       `/search/repositories?q=${name}+in:name&sort=stars&order=desc&page=${page}&per_page=10`
     );
-    console.log(res)
     return {
       items: res.items.map(transformRepositoryItem),
       totalCount: res.total_count,
@@ -91,6 +90,5 @@ export const transformTrendingRepository = (repository, idx) => {
 
 export const getTrendingRepos = async () => {
   const res = await getResource('https://github-trending-api.now.sh/repositories?language=&since=daily', '');
-  console.log(res);
   return res.slice(0,10).map(transformTrendingRepository)
 };
